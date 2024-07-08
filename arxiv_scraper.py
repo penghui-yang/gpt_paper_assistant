@@ -72,7 +72,7 @@ def get_papers_from_arxiv_api(area: str, timestamp, last_id) -> List[Paper]:
 
 def get_papers_from_arxiv_rss(area: str, config: Optional[dict]) -> List[Paper]:
     # get the feed from http://export.arxiv.org/rss/ and use the updated timestamp to avoid duplicates
-    updated = datetime.utcnow() - timedelta(days=5)
+    updated = datetime.utcnow() - timedelta(days=1)
     # format this into the string format 'Fri, 03 Nov 2023 00:30:00 GMT'
     updated_string = updated.strftime("%a, %d %b %Y %H:%M:%S GMT")
     print(updated_string)
@@ -135,9 +135,9 @@ def get_papers_from_arxiv_rss_api(area: str, config: Optional[dict]) -> List[Pap
     paper_list, timestamp, last_id = get_papers_from_arxiv_rss(area, config)
     if timestamp is None:
        return []
-    api_paper_list = get_papers_from_arxiv_api(area, timestamp, last_id)
-    merged_paper_list = merge_paper_list(paper_list, api_paper_list)
-    return merged_paper_list
+    if len(paper_list) == 0:
+        api_paper_list = get_papers_from_arxiv_api(area, timestamp, last_id)
+        return api_paper_list
     return paper_list
 
 
