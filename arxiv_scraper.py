@@ -75,6 +75,7 @@ def get_papers_from_arxiv_rss(area: str, config: Optional[dict]) -> List[Paper]:
     updated = datetime.utcnow() - timedelta(days=5)
     # format this into the string format 'Fri, 03 Nov 2023 00:30:00 GMT'
     updated_string = updated.strftime("%a, %d %b %Y %H:%M:%S GMT")
+    print(updated_string)
     feed = feedparser.parse(
         f"http://export.arxiv.org/rss/{area}", modified=updated_string
     )
