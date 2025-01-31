@@ -19,7 +19,7 @@ jobs:
     outputs:
       file-exists: ${{steps.file-check.outputs.file_exists}}
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Download artifact
       id: download-artifact
       uses: dawidd6/action-download-artifact@v2
