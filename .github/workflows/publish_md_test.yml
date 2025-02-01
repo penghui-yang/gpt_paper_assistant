@@ -40,10 +40,10 @@ jobs:
       with:
        token: ${{ secrets.GITHUB_TOKEN }}
        file: output.md
-    - uses: actions/upload-pages-artifact@v2
+    - uses: actions/upload-pages-artifact@v3
       if: steps.check_files.outputs.files_exists == 'true'
       with:
         path: dist
-    - uses: actions/deploy-pages@v2
+    - uses: actions/deploy-pages@v4
       if: steps.check_files.outputs.files_exists == 'true'
       id: deployment
