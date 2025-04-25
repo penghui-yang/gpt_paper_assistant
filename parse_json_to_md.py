@@ -19,12 +19,12 @@ def render_paper(paper_entry: dict, idx: int) -> str:
     # get the authors
     authors = paper_entry["authors"]
     paper_string = f'## {idx}. [{title}]({arxiv_url}) <a id="link{idx}"></a>\n'
-    paper_string += f"**ArXiv ID:** {arxiv_id}\n"
+    paper_string += f"**arXiv ID:** {arxiv_id}\n\n"
     paper_string += f'**Authors:** {", ".join(authors)}\n\n'
     paper_string += f"**Abstract:** {abstract}\n\n"
     if "COMMENT" in paper_entry:
         comment = paper_entry["COMMENT"]
-        paper_string += f"**Comment:** {comment}\n"
+        paper_string += f"**Comment:** {comment}\n\n"
     if "RELEVANCE" in paper_entry and "NOVELTY" in paper_entry:
         # get the relevance and novelty scores
         relevance = paper_entry["RELEVANCE"]
