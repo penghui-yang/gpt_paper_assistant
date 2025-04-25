@@ -64,6 +64,8 @@ def calc_price(model, usage):
         return (0.00015 * usage.prompt_tokens + 0.0006 * usage.completion_tokens) / 1000.0
     if (model == "gpt-3.5-turbo") or (model == "gpt-3.5-turbo-1106"):
         return (0.0015 * usage.prompt_tokens + 0.002 * usage.completion_tokens) / 1000.0
+    if model == "gpt-4.1-2025-04-14":
+        return (0.002 * usage.prompt_tokens + 0.008 * usage.completion_tokens) / 1000.0
 
 
 @retry.retry(tries=3, delay=2)
