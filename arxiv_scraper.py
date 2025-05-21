@@ -40,7 +40,7 @@ def get_papers_from_arxiv_api(area: str, timestamp, last_id) -> List[Paper]:
     # look for papers that are newer than the newest papers in RSS.
     # we do this by looking at last_id and grabbing everything newer.
     end_date = timestamp
-    start_date = timestamp - timedelta(days=4)
+    start_date = timestamp - timedelta(days=1)
     search = arxiv.Search(
         query="("
         + area
