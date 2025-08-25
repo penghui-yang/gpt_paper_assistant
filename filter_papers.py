@@ -18,6 +18,13 @@ def filter_by_author(all_authors, papers, author_targets, config):
     all_papers = {}  # dict for later filtering
     sort_dict = {}  # dict storing key and score
 
+    # Check if author matching is enabled
+    if not config["FILTERING"].getboolean("author_match") or not all_authors:
+        # If author matching is disabled, just populate all_papers and return empty selections
+        for paper in papers:
+            all_papers[paper.arxiv_id] = paper
+        return selected_papers, all_papers, sort_dict
+
     # author based selection
     for paper in papers:
         all_papers[paper.arxiv_id] = paper
@@ -189,10 +196,17 @@ def filter_by_gpt(
         postfix_prompt = f.read()
     all_cost = 0
     if config["SELECTION"].getboolean("run_openai"):
-        # filter first by hindex of authors to reduce costs.
-        paper_list = filter_papers_by_hindex(all_authors, papers, config)
-        if config["OUTPUT"].getboolean("debug_messages"):
-            print(str(len(paper_list)) + " papers after hindex filtering")
+        # Check if we should filter by h-index (only if author matching is enabled)
+        if config["FILTERING"].getboolean("author_match") and all_authors:
+            # filter first by hindex of authors to reduce costs.
+            paper_list = filter_papers_by_hindex(all_authors, papers, config)
+            if config["OUTPUT"].getboolean("debug_messages"):
+                print(str(len(paper_list)) + " papers after hindex filtering")
+        else:
+            # Skip h-index filtering if author matching is disabled
+            paper_list = papers
+            if config["OUTPUT"].getboolean("debug_messages"):
+                print(str(len(paper_list)) + " papers (skipped h-index filtering)")
         cost = 0
         paper_list, cost = filter_papers_by_title(
             paper_list, config, openai_client, base_prompt, criterion

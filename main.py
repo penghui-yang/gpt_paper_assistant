@@ -200,12 +200,18 @@ if __name__ == "__main__":
     papers = list(get_papers_from_arxiv(config))
     # dump all papers for debugging
 
-    all_authors = set()
-    for paper in papers:
-        all_authors.update(set(paper.authors))
-    if config["OUTPUT"].getboolean("debug_messages"):
-        print("Getting author info for " + str(len(all_authors)) + " authors")
-    all_authors = get_authors(list(all_authors), S2_API_KEY)
+    # Check if author matching is enabled
+    if config["FILTERING"].getboolean("author_match"):
+        all_authors = set()
+        for paper in papers:
+            all_authors.update(set(paper.authors))
+        if config["OUTPUT"].getboolean("debug_messages"):
+            print("Getting author info for " + str(len(all_authors)) + " authors")
+        all_authors = get_authors(list(all_authors), S2_API_KEY)
+    else:
+        if config["OUTPUT"].getboolean("debug_messages"):
+            print("Skipping author lookup - author_match is disabled")
+        all_authors = {}  # Empty dict since we're not using author filtering
 
     if config["OUTPUT"].getboolean("dump_debug_file"):
         with open(
