@@ -42,13 +42,13 @@ def get_papers_from_arxiv_api(area: str, timestamp, last_id) -> List[Paper]:
     end_date = timestamp
     start_date = timestamp - timedelta(days=1)
     search = arxiv.Search(
-        query="("
+        query="cat:"
         + area
-        + ") AND submittedDate:["
+        + " AND submittedDate:["
         + start_date.strftime("%Y%m%d")
-        + "* TO "
+        + " TO "
         + end_date.strftime("%Y%m%d")
-        + "*]",
+        + "]",
         max_results=None,
         sort_by=arxiv.SortCriterion.SubmittedDate,
     )
