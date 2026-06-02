@@ -57,7 +57,7 @@ def get_papers_from_arxiv_api(area: str, timestamp, last_id) -> List[Paper]:
     # 添加限流配置
     client = arxiv.Client(
         page_size=100,
-        delay_seconds=1.0,  # 每次请求间隔5秒
+        delay_seconds=5.0,  # 每次请求间隔5秒
         num_retries=5        # 失败后重试5次
     )
     
