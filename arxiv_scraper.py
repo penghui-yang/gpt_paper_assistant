@@ -52,7 +52,26 @@ def get_papers_from_arxiv_api(area: str, timestamp, last_id) -> List[Paper]:
         max_results=None,
         sort_by=arxiv.SortCriterion.SubmittedDate,
     )
-    results = list(arxiv.Client().results(search))
+    
+    # 添加限流配置
+    client = arxiv.Client(
+        page_size=100,
+        delay_seconds=1.0,  # 每次请求间隔5秒
+        num_retries=5        # 失败后重试5次
+    )
+    
+    # 加上重试保护
+    while True:
+        try:
+            results = list(client.results(search))
+            break
+        except arxiv.HTTPError as e:
+            if e.status == 429:
+                print("触发限流，等待60秒后重试...")
+                time.sleep(60)
+            else:
+                raise e
+    
     api_papers = []
     for result in results:
         new_id = result.get_short_id()[:10]
